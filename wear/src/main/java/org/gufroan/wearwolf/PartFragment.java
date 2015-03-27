@@ -1,5 +1,7 @@
 package org.gufroan.wearwolf;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.view.CardFragment;
 import android.view.LayoutInflater;
@@ -12,12 +14,13 @@ public class PartFragment extends CardFragment {
     private static final String COL = "COL";
     private static final String EXTRA_PART = "PART";
 
-    public static CardFragment create(final int row, final int col, final Part part) {
+    public static Fragment create(final int row, final int col, final Part part) {
         final PartFragment fragment = new PartFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ROW, row);
         bundle.putInt(COL, col);
         bundle.putParcelable(EXTRA_PART, null);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -27,6 +30,13 @@ public class PartFragment extends CardFragment {
         final TextView partView = (TextView) v.findViewById(R.id.part);
 
         partView.setText("Hello");
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final Intent intent = new Intent(getActivity(), SentenceActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         return v;
     }
