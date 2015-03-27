@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.gufroan.wearwolf.data.Part;
+
 public class PartFragment extends CardFragment {
     private static final String ROW = "ROW";
     private static final String COL = "COL";

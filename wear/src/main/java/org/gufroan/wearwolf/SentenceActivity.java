@@ -8,6 +8,8 @@ import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 import android.view.GestureDetector;
 
+import org.gufroan.wearwolf.data.Part;
+
 import java.util.Arrays;
 import java.util.List;
 
