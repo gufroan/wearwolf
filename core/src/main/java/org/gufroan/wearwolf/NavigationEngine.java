@@ -3,12 +3,17 @@ package org.gufroan.wearwolf;
 import org.gufroan.wearwolf.data.Node;
 import org.gufroan.wearwolf.data.Part;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by vitaliyistomov on 27/03/15.
  */
 public class NavigationEngine {
 
-    private static Node<Part> CONTENT = new Node<>(new Part("root_element"), null);
+    private static final Node<Part> CONTENT = new Node<>(new Part("root_element"), null);
+
+    private static Node<Part> cursor = CONTENT;
 
     static {
         Node<Part> currentParent = CONTENT;
@@ -59,7 +64,17 @@ public class NavigationEngine {
         CONTENT.addChild(new Node<>(new Part("123"), currentParent));
     }
 
-//    public Layer getLayer(final String breadcrumbsOfCurrentPosition) {
-//    }
+    public static Part navigateTo(int position) {
+        cursor = cursor.getChild(position);
+        return cursor.getData();
+    }
 
+    public static List<Part> getCurrentItems() {
+        final List<Part> parts = new ArrayList<>();
+        for (Node<Part> node : cursor.getChildren()) {
+            parts.add(node.getData());
+        }
+
+        return parts;
+    }
 }

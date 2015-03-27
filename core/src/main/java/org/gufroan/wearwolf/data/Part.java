@@ -6,6 +6,9 @@ public class Part {
 
     private String stringData;
 
+    public Part() {
+    }
+
     public Part(final String stringData) {
         this.stringData = stringData;
     }

@@ -10,14 +10,15 @@ import android.support.wearable.view.GridViewPager;
 
 import org.gufroan.wearwolf.data.Part;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SentenceActivity extends Activity {
 
     private static final String EXTRA_PARTS = "EXTRA_PARTS";
 
     private GridViewPager partsPager;
-    private ArrayList<Part> parts;
+    private List<Part> parts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,7 @@ public class SentenceActivity extends Activity {
         setContentView(R.layout.activity_parts);
 
         partsPager = (GridViewPager) findViewById(R.id.pager);
-        parts = new ArrayList<>();
+        parts = Arrays.asList(new Part(), new Part());
         partsPager.setAdapter(new PartsPagerAdapter(getFragmentManager()));
 
     }

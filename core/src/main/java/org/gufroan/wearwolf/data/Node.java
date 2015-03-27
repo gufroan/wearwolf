@@ -24,11 +24,19 @@ public class Node<T> {
         children.add(childNode);
     }
 
+    public List<Node<T>> getChildren() {
+        return children;
+    }
+
     public Node<T> getChild(final int index) {
         return children.get(index);
     }
 
     public Node<T> getParent() {
         return parent;
+    }
+
+    public T getData() {
+        return data;
     }
 }
