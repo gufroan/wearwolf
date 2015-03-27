@@ -1,16 +1,14 @@
 package org.gufroan.wearwolf;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.wearable.view.CardFragment;
+import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 
 import java.util.ArrayList;
-
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.Intent;
-import android.support.wearable.view.CardFragment;
-import android.support.wearable.view.FragmentGridPagerAdapter;
 
 public class SentenceActivity extends Activity {
 
@@ -38,7 +36,7 @@ public class SentenceActivity extends Activity {
 
         @Override
         public int getColumnCount(int row) {
-            return 3;
+            return 1;
         }
 
         @Override
@@ -53,28 +51,8 @@ public class SentenceActivity extends Activity {
                 CardFragment fragment = PartFragment.create(row, col, part);
                 return fragment;
             } else {
-                Fragment fragment = new ActionFragmentBuilder(createAppIntent(), getString(R.string.speak), R.drawable.ic_launcher_white).build();
-                return fragment;
+                return null;
             }
         }
-
-        @Override
-        public ImageReference getBackground(int row, int column) {
-            if (column == 0) {
-                Part part = parts.get(row);
-                return PartFragment.getBackgroundFor(part);
-            } else {
-                return ImageReference.forDrawable(R.drawable.microphone);
-            }
-        }
-
     }
-
-    private Intent createAppIntent() {
-        Intent intent = new Intent(this, WearP2PService.class);
-        intent.setAction(Constants.ACTION_OPEN_MOBILE_APP);
-        return intent;
-    }
-
-
 }

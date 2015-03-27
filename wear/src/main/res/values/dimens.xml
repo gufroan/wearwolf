@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="part_card_padding">4dp</dimen>
+  <dimen name="part_card_small_padding">2dp</dimen>
+  <dimen name="part_text_size">14dp</dimen>
+</resources>
