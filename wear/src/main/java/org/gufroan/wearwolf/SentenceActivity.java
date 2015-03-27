@@ -8,6 +8,8 @@ import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 
+import org.gufroan.wearwolf.data.Part;
+
 import java.util.ArrayList;
 
 public class SentenceActivity extends Activity {
