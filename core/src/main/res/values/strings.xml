@@ -4,6 +4,9 @@
     <array name="master">
         <item>@array/Common</item>
         <item>@array/Health</item>
+        <item>@array/Shop</item>
+        <item>@array/Restaurant</item>
+        <item>@array/Travel</item>
     </array>
     
     <array name="Common">
@@ -23,6 +26,48 @@
         <item>I\'m tired</item>
         <item>I\'m hungry</item>
         <item>I need medicine</item>
+    </array>
+
+    <array name="Shop">
+        <item>How much is this?</item>
+        <item>@array/Where_is_the</item>
+        <item>@array/Do_you_sell</item>
+    </array>
+
+    <array name="Where_is_the"> <!-- FixMe: can't put a … here !-->
+        <item>…water?</item>
+        <item>…milk?</item>
+        <item>…bread?</item>
+        <item>…beer?</item>
+        <item>…soap?</item>
+    </array>
+
+    <array name="Do_you_sell">
+        <item>…ice cream?</item>
+        <item>…cake?</item>
+        <item>…Doritos?</item>
+        <item>…Mountain Dew?</item>
+    </array>
+
+    <array name="Restaurant">
+        <item>Table for 1, please</item>
+        <item>Can I see the menu?</item>
+        <item>Can I have more water?</item>
+        <item>I\'d like to order this, please</item>
+        <item>What time do you close?</item>
+        <item>The bill, please.</item>
+    </array>
+
+    <array name="Travel">
+        <item>How much does this cost?</item>
+        <item>I want to buy this</item>
+        <item>How long before the next bus?</item>
+        <item>I\'d like a room for 1</item>
+        <item>When does it open?</item>
+        <item>What time do I need to check out?</item>
+        <item>I need a taxi</item>
+        <item>May I take a photo?</item>
+        <item>Would you please take a picture of me?</item>
     </array>
 
 </resources>

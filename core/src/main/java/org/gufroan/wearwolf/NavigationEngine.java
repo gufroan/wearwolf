@@ -29,9 +29,11 @@ public class NavigationEngine {
             if (value.startsWith("@")) {
                 //if (type.contains("array")) {
                 int id = masterList.getResourceId(i, 0);
-                Node<Part> category = new Node<>(new Part(res.getResourceEntryName(id)), parent);
+                Node<Part> category = new Node<>(new Part(res.getResourceEntryName(id).replace('_',' ')), parent);
                 populateList(res.obtainTypedArray(id), res, category);
             } else {
+                if (value.startsWith("…"))
+                    value = (parent.getData().getStringData() + value).replace('…',' ');
                 parent.addChild(new Node<>(new Part(value), parent));
             }
         }
