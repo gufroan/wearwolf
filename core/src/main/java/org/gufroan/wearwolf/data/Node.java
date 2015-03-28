@@ -10,7 +10,7 @@ public class Node<T> {
 
     private T data;
     private Node<T> parent;
-    private List<Node<T>> children;
+    private List<Node<T>> children = new ArrayList<>();
 
     public Node(final T data, final Node<T> parent) {
         this.data = data;
@@ -18,10 +18,6 @@ public class Node<T> {
     }
 
     public void addChild(final Node<T> childNode) {
-        if (children == null) {
-            children = new ArrayList<>();
-        }
-
         children.add(childNode);
     }
 

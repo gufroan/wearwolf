@@ -81,7 +81,9 @@ public class NavigationEngine {
     public static Part goBack() {
         Part result = null;
         if (cursor.getParent() != null) {
-            result = cursor.getParent().getData();
+            cursor = cursor.getParent();
+            result = cursor.getData();
+
         }
 
         return result;
