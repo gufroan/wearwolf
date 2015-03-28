@@ -20,6 +20,8 @@ public class NavigationEngine {
 
     public static void populateList(TypedArray masterList, Resources res, Node<Part> parent) {
         if (parent == null) {
+            content_root = new Node<>(new Part("root_element"), null);
+            cursor = content_root;
             parent = cursor;
         }
 
@@ -33,7 +35,7 @@ public class NavigationEngine {
                 populateList(res.obtainTypedArray(id), res, category);
             } else {
                 if (value.startsWith("…"))
-                    value = (parent.getData().getStringData() + value).replace('…',' ');
+                    value = (parent.getData().getStringData() + value).replace('…', ' ');
                 parent.addChild(new Node<>(new Part(value), parent));
             }
         }
