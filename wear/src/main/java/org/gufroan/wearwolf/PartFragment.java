@@ -14,14 +14,14 @@ import org.gufroan.wearwolf.data.Part;
 public class PartFragment extends CardFragment {
     private static final String ROW = "ROW";
     private static final String COL = "COL";
-    private static final String EXTRA_PART = "PART";
+    public static final String PART = "PART";
 
     public static Fragment create(final int row, final int col, final Part part) {
         final PartFragment fragment = new PartFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ROW, row);
         bundle.putInt(COL, col);
-        bundle.putParcelable(EXTRA_PART, null);
+        bundle.putParcelable(PART, part);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -31,12 +31,25 @@ public class PartFragment extends CardFragment {
         View v = inflater.inflate(R.layout.part_item, null);
         final TextView partView = (TextView) v.findViewById(R.id.part);
 
-        partView.setText("Hello");
+        final Part part = getArguments().getParcelable(PART);
+        partView.setText(part.getStringData());
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final Intent intent = new Intent(getActivity(), SentenceActivity.class);
-                getActivity().startActivity(intent);
+
+                if (NavigationEngine.getCurrentItems().size() > 0) {
+                    final Intent intent = new Intent(getActivity(), SentenceActivity.class);
+                    NavigationEngine.navigateTo(getArguments().getInt(ROW));
+                    getActivity().startActivity(intent);
+                } else {
+                    final Intent intent = new Intent(getActivity(), ActionActivity.class);
+                    getActivity().startActivity(intent);
+
+                    Intent wearP2PIntent = new Intent(getActivity(), WearP2PService.class);
+                    wearP2PIntent.setAction(Constants.ACTION_CLICK);
+                    wearP2PIntent.putExtra(PART, part);
+                    getActivity().startService(wearP2PIntent);
+                }
             }
         });
 

@@ -10,7 +10,6 @@ import android.view.GestureDetector;
 
 import org.gufroan.wearwolf.data.Part;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class SentenceActivity extends Activity {
@@ -27,10 +26,17 @@ public class SentenceActivity extends Activity {
         setContentView(R.layout.activity_parts);
 
         partsPager = (GridViewPager) findViewById(R.id.pager);
-        parts = Arrays.asList(new Part(), new Part());
+        parts = NavigationEngine.getCurrentItems();
         partsPager.setAdapter(new PartsPagerAdapter(getFragmentManager()));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isFinishing()) {
+            NavigationEngine.goBack();
+        }
+    }
 
     private class PartsPagerAdapter extends FragmentGridPagerAdapter {
 

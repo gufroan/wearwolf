@@ -1,6 +1,9 @@
 package org.gufroan.wearwolf.data;
 
-public class Part {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Part implements Parcelable {
 
 //    private int id;
 
@@ -32,5 +35,29 @@ public class Part {
 
     public void setStringData(String stringData) {
         this.stringData = stringData;
+    }
+
+    @Override
+    public int describeContents() {
+        return stringData.hashCode();
+    }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeString(stringData);
+    }
+
+    public static final Parcelable.Creator<Part> CREATOR = new Parcelable.Creator<Part>() {
+        public Part createFromParcel(Parcel in) {
+            return new Part(in);
+        }
+
+        public Part[] newArray(int size) {
+            return new Part[size];
+        }
+    };
+
+    private Part(Parcel in) {
+        stringData = in.readString();
     }
 }

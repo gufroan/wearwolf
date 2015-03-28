@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="action_button_normal">#2878ff</color>
+    <color name="action_button_pressed">#2955c9</color>
+    <color name="action_fragment_pressed">#80000000</color>
+</resources>
