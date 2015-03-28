@@ -36,19 +36,23 @@ public class PartFragment extends CardFragment {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                NavigationEngine.navigateTo(getArguments().getInt(ROW));
 
                 if (NavigationEngine.getCurrentItems().size() > 0) {
                     final Intent intent = new Intent(getActivity(), SentenceActivity.class);
-                    NavigationEngine.navigateTo(getArguments().getInt(ROW));
                     getActivity().startActivity(intent);
                 } else {
-                    final Intent intent = new Intent(getActivity(), ActionActivity.class);
-                    getActivity().startActivity(intent);
+                    NavigationEngine.goBack();
 
                     Intent wearP2PIntent = new Intent(getActivity(), WearP2PService.class);
                     wearP2PIntent.setAction(Constants.ACTION_CLICK);
                     wearP2PIntent.putExtra(PART, part);
-                    getActivity().startService(wearP2PIntent);
+
+                    final Intent intent = new Intent(getActivity(), ActionActivity.class);
+                    intent.putExtra(ActionActivity.INTENT, wearP2PIntent);
+                    getActivity().startActivity(intent);
+
+
                 }
             }
         });
