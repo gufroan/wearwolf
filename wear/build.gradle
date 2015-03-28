@@ -7,7 +7,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "org.gufroan.wearakey"
+        applicationId "org.gufroan.wearwolf"
         minSdkVersion 20
         targetSdkVersion 22
         versionCode 1

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "org.gufroan.wearakey"
+        applicationId "org.gufroan.wearwolf"
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
@@ -25,4 +25,5 @@ dependencies {
     wearApp project(':wear')
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.google.android.gms:play-services:7.0.0'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
 }

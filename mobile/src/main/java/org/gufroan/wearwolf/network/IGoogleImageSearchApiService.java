@@ -24,6 +24,6 @@ public interface IGoogleImageSearchApiService {
      * @param query         to ask search engine
      * @return {@link ResponseRoot} object with the search query results
      */
-    @GET("/ajax/services/search/images?v=1.0&rsz=" + NetworkApi.RESULTS_PER_PAGE + "&imgsz=xlarge")
-    ResponseRoot listResults(@Query("q") String query);
+    @GET("/ajax/services/search/images?v=1.0&rsz=" + NetworkApi.RESULTS_PER_PAGE + "&imgsz=small")
+    ResponseRoot listResults(@Query("q") String query, @Query("start") int startPosition);
 }

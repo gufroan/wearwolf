@@ -4,7 +4,12 @@ import android.net.Uri;
 
 import org.gufroan.wearwolf.data.pojo.ResponseRoot;
 
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import retrofit.RestAdapter;
+import retrofit.android.MainThreadExecutor;
 
 /**
  * Network API aggregator.
@@ -34,6 +39,9 @@ public class NetworkApi {
     private NetworkApi() {
         final RestAdapter googleImageSearchAdapter = new RestAdapter.Builder()
                 .setEndpoint(IGoogleImageSearchApiService.HOST)
+                .setExecutors(
+                        new ThreadPoolExecutor(4, 10, 10000, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<Runnable>(20)),
+                        new MainThreadExecutor())
                 .build();
 
         mGoogleImageSearchApiService = googleImageSearchAdapter.create(IGoogleImageSearchApiService.class);
@@ -54,10 +62,11 @@ public class NetworkApi {
      * Query search engine for the results and parse results based on user provided query
      * and start position.
      *
-     * @param query         to ask search engine
+     * @param query    to ask search engine
+     * @param startPos start position
      * @return {@link ResponseRoot} object with the search query results
      */
-    public ResponseRoot triggerSearchRequest(final String query) {
-        return mGoogleImageSearchApiService.listResults(Uri.encode(query));
+    public ResponseRoot triggerSearchRequest(final String query, final int startPos) {
+        return mGoogleImageSearchApiService.listResults(Uri.encode(query), startPos);
     }
 }
