@@ -45,7 +45,6 @@ public class TextToSpeechService extends IntentService implements TextToSpeech.O
         mTTS.setOnUtteranceProgressListener(new UtteranceProgressListener() {
             @Override
             public void onStart(String s) {
-                Toast.makeText(TextToSpeechService.this, "Started", Toast.LENGTH_SHORT).show();
             }
 
             @Override

@@ -26,6 +26,8 @@ public class SentenceActivity extends Activity {
         setContentView(R.layout.activity_parts);
 
         partsPager = (GridViewPager) findViewById(R.id.pager);
+
+        NavigationEngine.populateList(getResources().obtainTypedArray(R.array.master), getResources(), null);
         parts = NavigationEngine.getCurrentItems();
         partsPager.setAdapter(new PartsPagerAdapter(getFragmentManager()));
     }
