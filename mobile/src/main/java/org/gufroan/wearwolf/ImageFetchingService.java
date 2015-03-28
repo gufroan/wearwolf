@@ -39,6 +39,7 @@ public class ImageFetchingService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        NavigationEngine.populateList(getResources().obtainTypedArray(R.array.master), getResources(), null);
         final List<String> cardLabels = NavigationEngine.getValues();
         final File tmpDir = new File(Environment.getExternalStorageDirectory() + "/wearwolf");
         if (tmpDir.exists()) {
