@@ -1,11 +1,13 @@
 package org.gufroan.wearwolf;
 
 import android.content.Intent;
+import android.speech.tts.TextToSpeech;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
@@ -32,16 +34,18 @@ public class MobileP2PService extends WearableListenerService {
         for (DataEvent dataEvent : dataEvents) {
             if (dataEvent.getType() == DataEvent.TYPE_CHANGED) {
                 if (Constants.PATH_CLICK.equals(dataEvent.getDataItem().getUri().getPath())) {
-                    sendClick();
+                    DataMapItem dataMapItem = DataMapItem.fromDataItem(dataEvent.getDataItem());
+                    String msg = dataMapItem.getDataMap().getString(Constants.MESSAGE_KEY);
+                    processMessage(msg); // fixme
                 }
             }
         }
     }
 
-    private void sendClick() {
-        final Intent imeIntent = new Intent(this, WearWolfIME.class);
-        imeIntent.setAction(Constants.ACTION_CLICK);
-        startService(imeIntent);
+    private void processMessage(String msg) {
+        Intent ttsIntent = new Intent(getApplicationContext(),TextToSpeechService.class);
+        ttsIntent.putExtra("message", msg);
+        startService(ttsIntent);
     }
 
     @Override

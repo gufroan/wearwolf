@@ -13,4 +13,6 @@ public class Constants {
     public static final String DATA_MANUFACTURER = "data_manufacturer";
     public static final String DATA_PRODUCT = "data_product";
     public static final String DATA_CLICK_TIMESTAMP = "data_click_timestamp";
+
+    public static final String MESSAGE_KEY = "key_msg";
 }
