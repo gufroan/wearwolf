@@ -1,28 +1,114 @@
 package org.gufroan.wearwolf;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
+import org.gufroan.core.R;
 import org.gufroan.wearwolf.data.Node;
 import org.gufroan.wearwolf.data.Part;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by vitaliyistomov on 27/03/15.
  */
 public class NavigationEngine {
 
-    private static Node<Part> content_root = new Node<>(new Part("root_element"), null);
+    private static final String CUSTOM_NODES_DESCRIPTION_STORAGE_FILE = "/custom_nodes.txt";
 
-    private static Node<Part> cursor = content_root;
+    private static final Node<Part> CONTENT_ROOT = new Node<>(new Part("root_element"), null);
 
-    public static void populateList(TypedArray masterList, Resources res, Node<Part> parent) {
-        if (parent == null) {
-            content_root = new Node<>(new Part("root_element"), null);
-            cursor = content_root;
-            parent = cursor;
+    private static Node<Part> sNavigationCursor = CONTENT_ROOT;
+
+    public static void writeCustomElementToFileStorage(final Context ctx, final String value) {
+        try {
+            final Writer output = new BufferedWriter(new FileWriter(ctx.getFilesDir() + CUSTOM_NODES_DESCRIPTION_STORAGE_FILE, true));
+            output.append(sNavigationCursor.getData().getStringData()).append("|").append(value);
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addToCurrentNode(final String value) {
+        sNavigationCursor.addChild(new Node<>(new Part(value), sNavigationCursor));
+    }
+
+    public static void populateList(final Context ctx) {
+        final Resources resources = ctx.getResources();
+        final TypedArray masterList = resources.obtainTypedArray(R.array.master);
+        populateList(masterList, resources, null);
+        populateCustomNodes(ctx);
+    }
+
+    private static void populateCustomNodes(final Context ctx) {
+        final Scanner scanner;
+        try {
+            scanner = new Scanner(new File(ctx.getFilesDir() + CUSTOM_NODES_DESCRIPTION_STORAGE_FILE));
+
+            while (scanner.hasNext()) {
+                final String line = scanner.nextLine();
+                if (line != null) {
+                    final Node<Part> node = parseRecord(line);
+                    if ((node != null) && (node.getParent() != null)) {
+                        node.getParent().addChild(node);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Node<Part> parseRecord(final String line) {
+        final Node<Part> result;
+        final List<String> lines = Arrays.asList(line.split("|"));
+        if (lines.size() == 2) {
+            final String parentName = lines.get(0);
+            final String value = lines.get(1);
+            if (parentName != null && !parentName.isEmpty()) {
+                result = new Node<>(new Part(value), getParentByName(parentName, CONTENT_ROOT));
+            } else {
+                result = null;
+            }
+        } else {
+            result = null;
+        }
+
+        return result;
+    }
+
+    private static Node<Part> getParentByName(final String parentName, final Node<Part> cursor) {
+        Node<Part> result = null;
+        for (Node<Part> node : cursor.getChildren()) {
+            if (parentName.equals(node.getData().getStringData())) {
+                result = node;
+                break;
+            } else {
+                final Node<Part> tmp = getParentByName(parentName, node);
+                if (tmp != null) {
+                    result = tmp;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static void populateList(TypedArray masterList, Resources res, Node<Part> currentNode) {
+        if (currentNode == null) {
+            currentNode = CONTENT_ROOT;
         }
 
         int length = masterList.length();
@@ -31,32 +117,32 @@ public class NavigationEngine {
             if (value.startsWith("@")) {
                 //if (type.contains("array")) {
                 int id = masterList.getResourceId(i, 0);
-                Node<Part> category = new Node<>(new Part(res.getResourceEntryName(id).replace('_',' ')), parent);
+                Node<Part> category = new Node<>(new Part(res.getResourceEntryName(id).replace('_', ' ')), currentNode);
                 populateList(res.obtainTypedArray(id), res, category);
             } else {
-                if (value.startsWith("…"))
-                    value = (parent.getData().getStringData() + value).replace('…', ' ');
-                parent.addChild(new Node<>(new Part(value), parent));
+                if (value.startsWith("…")) {
+                    value = (currentNode.getData().getStringData() + value).replace('…', ' ');
+                }
+
+                currentNode.addChild(new Node<>(new Part(value), currentNode));
             }
         }
 
-        if (parent.getParent() == null) { // if this is the root element
+        if (currentNode.getParent() == null) { // if this is the root element
             masterList.recycle(); // Important!
-            content_root = parent;
-            cursor = parent;
         } else {
-            parent.getParent().addChild(parent);
+            currentNode.getParent().addChild(currentNode);
         }
     }
 
     public static Part navigateTo(int position) {
-        cursor = cursor.getChild(position);
-        return cursor.getData();
+        sNavigationCursor = sNavigationCursor.getChild(position);
+        return sNavigationCursor.getData();
     }
 
     public static List<Part> getCurrentItems() {
         final List<Part> parts = new ArrayList<>();
-        for (Node<Part> node : cursor.getChildren()) {
+        for (Node<Part> node : sNavigationCursor.getChildren()) {
             parts.add(node.getData());
         }
 
@@ -65,17 +151,16 @@ public class NavigationEngine {
 
     public static Part goBack() {
         Part result = null;
-        if (cursor.getParent() != null) {
-            cursor = cursor.getParent();
-            result = cursor.getData();
-
+        if (sNavigationCursor.getParent() != null) {
+            sNavigationCursor = sNavigationCursor.getParent();
+            result = sNavigationCursor.getData();
         }
 
         return result;
     }
 
     public static List<String> getValues() {
-        return getValues(content_root);
+        return getValues(CONTENT_ROOT);
     }
 
     public static List<String> getValues(Node<Part> current) {

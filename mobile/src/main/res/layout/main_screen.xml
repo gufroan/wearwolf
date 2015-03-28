@@ -3,6 +3,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:clickable="false"
               android:orientation="vertical">
 
     <Toolbar
@@ -10,10 +11,12 @@
         android:background="?colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
+        android:clickable="false"
         tools:ignore="NewApi"/>
 
     <GridView
         android:id="@+id/main_grid"
+        android:clickable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

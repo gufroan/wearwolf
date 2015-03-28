@@ -1,20 +1,25 @@
 package org.gufroan.wearwolf.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import org.gufroan.wearwolf.ImageFetchingService;
 import org.gufroan.wearwolf.NavigationEngine;
 import org.gufroan.wearwolf.R;
 import org.gufroan.wearwolf.TextToSpeechService;
 import org.gufroan.wearwolf.data.Part;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -29,23 +34,25 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main_screen);
         setActionBar((android.widget.Toolbar) findViewById(R.id.main_toolbar));
         final GridView grid = (GridView) findViewById(R.id.main_grid);
-        TypedArray masterArray = getResources().obtainTypedArray(R.array.master);
-        if (NavigationEngine.getCurrentItems().size() == 0)
-            NavigationEngine.populateList(masterArray, getResources(), null);
-        List<Part> navigationTree = NavigationEngine.getCurrentItems();
+        if (NavigationEngine.getCurrentItems().size() == 0) {
+            NavigationEngine.populateList(this);
+        }
+
+        final List<Part> navigationTree = NavigationEngine.getCurrentItems();
         grid.setAdapter(new MainGridAdapter(this, navigationTree));
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Part current = NavigationEngine.navigateTo(i);
-                List<Part> navigationTree = NavigationEngine.getCurrentItems();
+                final Part current = NavigationEngine.navigateTo(i);
+                final List<Part> navigationTree = NavigationEngine.getCurrentItems();
                 if (navigationTree.size() == 0) {
-                    Intent ttsIntent = new Intent(getApplicationContext(), TextToSpeechService.class);
+                    final Intent ttsIntent = new Intent(getApplicationContext(), TextToSpeechService.class);
                     ttsIntent.putExtra("message", current.getStringData());
                     startService(ttsIntent);
                     NavigationEngine.goBack();
                 } else {
-                    MainGridAdapter mainGridAdapter = ((MainGridAdapter) grid.getAdapter());
+                    final MainGridAdapter mainGridAdapter = (MainGridAdapter) grid.getAdapter();
                     updateTitle(current.getStringData());
                     mainGridAdapter.updateList(navigationTree);
                     mainGridAdapter.notifyDataSetChanged();
@@ -57,21 +64,67 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         Part parent = NavigationEngine.goBack();
-        if (parent == null)
+        if (parent == null) {
             super.onBackPressed();
-        else {
-            MainGridAdapter mainGridAdapter = ((MainGridAdapter)
-                    ((GridView) findViewById(R.id.main_grid)).getAdapter());
+        } else {
+            final MainGridAdapter mainGridAdapter = (MainGridAdapter) ((GridView) findViewById(R.id.main_grid)).getAdapter();
             mainGridAdapter.updateList(NavigationEngine.getCurrentItems());
             mainGridAdapter.notifyDataSetChanged();
             updateTitle(parent.getStringData());
         }
     }
 
-    private void updateTitle(String newTitle){
-        if (newTitle.equals("root_element"))
+    private void updateTitle(String newTitle) {
+        if (newTitle.equals("root_element")) {
             newTitle = getString(R.string.categories);
+        }
+
         setTitle(newTitle);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean result;
+        switch (item.getItemId()) {
+            case R.id.action_add_item:
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                        .setView(R.layout.add_custom_sentence)
+                        .setTitle(R.string.custom_sentence)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                final AlertDialog ad = (AlertDialog) dialog;
+                                final String newSentence = ((EditText) ad.findViewById(R.id.text1)).getText().toString().trim();
+                                NavigationEngine.writeCustomElementToFileStorage(MainActivity.this, newSentence);
+                                NavigationEngine.addToCurrentNode(newSentence);
+                                ((MainGridAdapter) ((GridView) findViewById(R.id.main_grid)).getAdapter()).notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.show();
+                result = true;
+                break;
+            default:
+                result = super.onOptionsItemSelected(item);
+                break;
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        final MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
