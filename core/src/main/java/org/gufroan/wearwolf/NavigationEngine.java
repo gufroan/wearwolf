@@ -88,4 +88,17 @@ public class NavigationEngine {
 
         return result;
     }
+
+    public static List<String> getValues() {
+        return getValues(CONTENT);
+    }
+
+    public static List<String> getValues(Node<Part> current) {
+        final List<String> list = new ArrayList<>();
+        for (final Node<Part> node : current.getChildren()) {
+            list.addAll(getValues(node));
+        }
+
+        return list;
+    }
 }
