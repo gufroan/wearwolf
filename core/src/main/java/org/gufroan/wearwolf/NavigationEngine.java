@@ -82,6 +82,8 @@ public class NavigationEngine {
             list.addAll(getValues(node));
         }
 
+        list.add(current.getData().getStringData());
+
         return list;
     }
 }
