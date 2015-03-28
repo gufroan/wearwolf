@@ -19,28 +19,30 @@ public class NavigationEngine {
     private static Node<Part> cursor = content_root;
 
     public static void populateList(TypedArray masterList, Resources res, Node<Part> parent) {
-
-        if (parent == null)
+        if (parent == null) {
             parent = cursor;
+        }
 
         int length = masterList.length();
         for (int i = 0; i < length; ++i) {
             String value = masterList.getString(i);
             if (value.startsWith("@")) {
-            //if (type.contains("array")) {
+                //if (type.contains("array")) {
                 int id = masterList.getResourceId(i, 0);
                 Node<Part> category = new Node<>(new Part(res.getResourceEntryName(id)), parent);
                 populateList(res.obtainTypedArray(id), res, category);
-            }
-            else
+            } else {
                 parent.addChild(new Node<>(new Part(value), parent));
+            }
         }
+
         if (parent.getParent() == null) { // if this is the root element
             masterList.recycle(); // Important!
             content_root = parent;
             cursor = parent;
-        } else
+        } else {
             parent.getParent().addChild(parent);
+        }
     }
 
     public static Part navigateTo(int position) {
@@ -69,7 +71,7 @@ public class NavigationEngine {
     }
 
     public static List<String> getValues() {
-        return getValues(CONTENT);
+        return getValues(content_root);
     }
 
     public static List<String> getValues(Node<Part> current) {
