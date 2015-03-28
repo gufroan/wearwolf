@@ -1,3 +1,28 @@
 <resources>
-  <string name="app_name">core</string>
+    <string name="app_name">core</string>
+
+    <array name="master">
+        <item>@array/Common</item>
+        <item>@array/Health</item>
+    </array>
+    
+    <array name="Common">
+        <item>Hello</item>
+        <item>Goodbye</item>
+        <item>Thank you!</item>
+        <item>Nice to see you!</item>
+        <item>Where is it?</item>
+        <item>When is it?</item>
+        <item>Goodbye</item>
+        <item>What is this?</item>
+    </array>
+
+    <array name="Health">
+        <item>I have a headache</item>
+        <item>I don\'t feel good</item>
+        <item>I\'m tired</item>
+        <item>I\'m hungry</item>
+        <item>I need medicine</item>
+    </array>
+
 </resources>
