@@ -14,6 +14,7 @@ public class Node<T> {
 
     public Node(final T data, final Node<T> parent) {
         this.data = data;
+        this.parent = parent;
     }
 
     public void addChild(final Node<T> childNode) {
