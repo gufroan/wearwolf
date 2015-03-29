@@ -3,6 +3,10 @@
   <!-- Base application theme. -->
   <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/amazing_blue</item>
+    <item name="colorPrimaryDark">@color/amazing_dark_blue</item>
+    <item name="colorAccent">@color/amazing_accent</item>
+    <item name="colorControlHighlight">@color/amazing_blue_highlight</item>
   </style>
 
 </resources>

@@ -70,7 +70,8 @@ public class MainGridAdapter extends BaseAdapter {
         int backgroundId = mContext.getResources().getIdentifier(label, null, null);
         if (backgroundId == 0) {
             Random rnd = new Random();
-            int color = Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            // 150 alpha would make colors more soft
+            int color = Color.argb(150, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
             ((CardView) card).getChildAt(0).setBackgroundColor(color);
         } else
             ((CardView) card).getChildAt(0).setBackgroundResource(backgroundId);
