@@ -3,7 +3,10 @@ package org.gufroan.wearwolf;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.CardScrollView;
@@ -15,6 +18,8 @@ import android.widget.TextView;
 
 import org.gufroan.wearwolf.data.Part;
 
+import java.util.Random;
+
 public class PartFragment extends CardFragment implements GridPageOptions {
     private static final String ROW = "ROW";
     private static final String COL = "COL";
@@ -22,6 +27,7 @@ public class PartFragment extends CardFragment implements GridPageOptions {
 
     public static Fragment create(final int row, final int col, final Part part) {
         final PartFragment fragment = new PartFragment();
+
         Bundle bundle = new Bundle();
         bundle.putInt(ROW, row);
         bundle.putInt(COL, col);
@@ -79,11 +85,26 @@ public class PartFragment extends CardFragment implements GridPageOptions {
 
     @Override
     public Drawable getBackground() {
-        return null;
+        String name = NavigationEngine.getCurrentItems().get(getArguments().getInt(ROW)).getStringData();
+        name = name.toLowerCase().replace(' ', '_').replaceAll("[^a-z]","");
+        int bgID = getResources().getIdentifier(name, "drawable", getActivity().getPackageName());
+
+        Random rnd = new Random();
+        int color = Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        Drawable background;
+
+        if (bgID != 0) {
+            background = new LayerDrawable(new Drawable[]{
+                    new ColorDrawable(color),
+                    getResources().getDrawable(bgID)});
+        }
+        else
+            background = new ColorDrawable(color);
+
+        return background;
     }
 
     @Override
-    public void setBackgroundListener(final BackgroundListener backgroundListener) {
-
+    public void setBackgroundListener(BackgroundListener backgroundListener) {
     }
 }
