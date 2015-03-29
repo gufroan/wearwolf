@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.wearable.view.CardFragment;
+import android.support.wearable.view.CardScrollView;
 import android.support.wearable.view.GridPageOptions;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,12 +37,22 @@ public class PartFragment extends CardFragment implements GridPageOptions {
 
         final Part part = getArguments().getParcelable(PART);
         partView.setText(part.getStringData());
-        container.setOnClickListener(new View.OnClickListener() {
+
+        final CardScrollView rootView = ((CardScrollView) container.getParent());
+        rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 PartFragment.this.onClick(getActivity(), part, getArguments().getInt(ROW));
             }
         });
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                PartFragment.this.onClick(getActivity(), part, getArguments().getInt(ROW));
+            }
+        });
+
 
         return v;
     }
