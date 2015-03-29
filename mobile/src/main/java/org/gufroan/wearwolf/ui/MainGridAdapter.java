@@ -31,6 +31,7 @@ import java.util.Random;
  * limitations under the License.
  */
 public class MainGridAdapter extends BaseAdapter {
+
     private List<Part> mParts;
     Context mContext;
 
@@ -39,7 +40,7 @@ public class MainGridAdapter extends BaseAdapter {
         mParts = parts;
     }
 
-    public void updateList(List<Part> parts){
+    public void updateList(List<Part> parts) {
         this.mParts = parts;
     }
 
@@ -61,20 +62,23 @@ public class MainGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View card, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater)
-                mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        String label = mParts.get(position).getStringData();
-        if (card == null)
+        final LayoutInflater inflater = LayoutInflater.from(mContext);
+        final String label = mParts.get(position).getStringData();
+        if (card == null) {
             card = inflater.inflate(R.layout.card_menu, parent, false);
+        }
+
         ((TextView) card.findViewWithTag("card_tag")).setText(label);
-        int backgroundId = mContext.getResources().getIdentifier(label, null, null);
+        final int backgroundId = mContext.getResources().getIdentifier(label, null, null);
         if (backgroundId == 0) {
             Random rnd = new Random();
             // 150 alpha would make colors more soft
             int color = Color.argb(150, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
             ((CardView) card).getChildAt(0).setBackgroundColor(color);
-        } else
+        } else {
             ((CardView) card).getChildAt(0).setBackgroundResource(backgroundId);
+        }
+
         return card;
     }
 
