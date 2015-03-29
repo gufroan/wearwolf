@@ -94,7 +94,9 @@ public class MainActivity extends ActionBarActivity {
                                 final String newSentence = ((EditText) ad.findViewById(R.id.text1)).getText().toString().trim();
                                 NavigationEngine.writeCustomElementToFileStorage(MainActivity.this, newSentence);
                                 NavigationEngine.addToCurrentNode(newSentence);
-                                ((MainGridAdapter) ((GridView) findViewById(R.id.main_grid)).getAdapter()).notifyDataSetChanged();
+                                final GridView grid = (GridView) findViewById(R.id.main_grid);
+                                final List<Part> parts = NavigationEngine.getCurrentItems();
+                                ((MainGridAdapter) grid.getAdapter()).updateList(parts);
                                 dialog.dismiss();
                             }
                         })
