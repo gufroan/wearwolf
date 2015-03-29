@@ -47,6 +47,9 @@ public class ActionFragment extends Fragment implements View.OnClickListener, Vi
         iconView.setOnTouchListener(this);
         TextView textView = (TextView) rootView.findViewById(R.id.action_label);
         textView.setText(actionLabel);
+
+        rootView.setOnClickListener(this);
+        rootView.setOnTouchListener(this);
         return rootView;
     }
 
