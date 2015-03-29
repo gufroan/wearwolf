@@ -7,13 +7,16 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import org.gufroan.p2p.AbstractCommand;
 import org.gufroan.wearwolf.data.Part;
-import org.gufroan.wearwolf.p2p.AbstractCommand;
 
 public class WearP2PService extends WearableListenerService {
 
@@ -58,5 +61,23 @@ public class WearP2PService extends WearableListenerService {
             }
             mGoogleApiClient.disconnect();
         }
+    }
+
+    @Override
+    public void onDataChanged(final DataEventBuffer dataEvents) {
+        for (DataEvent dataEvent : dataEvents) {
+            if (dataEvent.getType() == DataEvent.TYPE_CHANGED) {
+                String path = dataEvent.getDataItem().getUri().getPath();
+                if (dataEvent.getDataItem().getUri().getPath().startsWith(Constants.PATH_NODE)) {
+                    DataMapItem dataMapItem = DataMapItem.fromDataItem(dataEvent.getDataItem());
+                    String msg = dataMapItem.getDataMap().getString(Constants.MESSAGE_KEY);
+                    updateNode(path, msg); // fixme
+                }
+            }
+        }
+    }
+
+    private void updateNode(final String path, final String stringData) {
+        NavigationEngine.addTo(path, new Part(stringData));
     }
 }

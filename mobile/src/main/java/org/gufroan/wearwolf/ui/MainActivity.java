@@ -93,7 +93,7 @@ public class MainActivity extends ActionBarActivity {
                                 final AlertDialog ad = (AlertDialog) dialog;
                                 final String newSentence = ((EditText) ad.findViewById(R.id.text1)).getText().toString().trim();
                                 NavigationEngine.writeCustomElementToFileStorage(MainActivity.this, newSentence);
-                                NavigationEngine.addToCurrentNode(newSentence);
+                                NavigationEngine.addToCurrentNode(MainActivity.this, newSentence);
                                 final GridView grid = (GridView) findViewById(R.id.main_grid);
                                 final List<Part> parts = NavigationEngine.getCurrentItems();
                                 ((MainGridAdapter) grid.getAdapter()).updateList(parts);

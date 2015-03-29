@@ -1,4 +1,4 @@
-package org.gufroan.wearwolf.p2p;
+package org.gufroan.p2p;
 
 
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
+
 
 public abstract class AbstractCommand implements GoogleApiClient.ConnectionCallbacks,  GoogleApiClient.OnConnectionFailedListener {
 

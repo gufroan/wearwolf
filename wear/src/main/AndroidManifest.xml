@@ -26,7 +26,11 @@
     <activity
       android:name="android.support.wearable.activity.ConfirmationActivity"/>
     <activity android:name=".ActionActivity"/>
-    <service android:name="org.gufroan.wearwolf.WearP2PService" />
+    <service android:name="org.gufroan.wearwolf.WearP2PService" >
+      <intent-filter>
+        <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+      </intent-filter>
+    </service>
   </application>
 
 </manifest>

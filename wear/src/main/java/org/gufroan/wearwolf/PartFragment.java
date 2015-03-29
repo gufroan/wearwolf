@@ -1,9 +1,12 @@
 package org.gufroan.wearwolf;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.wearable.view.CardFragment;
+import android.support.wearable.view.GridPageOptions;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,7 @@ import android.widget.TextView;
 
 import org.gufroan.wearwolf.data.Part;
 
-public class PartFragment extends CardFragment {
+public class PartFragment extends CardFragment implements GridPageOptions {
     private static final String ROW = "ROW";
     private static final String COL = "COL";
     public static final String PART = "PART";
@@ -33,31 +36,43 @@ public class PartFragment extends CardFragment {
 
         final Part part = getArguments().getParcelable(PART);
         partView.setText(part.getStringData());
-        v.setOnClickListener(new View.OnClickListener() {
+        container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                NavigationEngine.navigateTo(getArguments().getInt(ROW));
-
-                if (NavigationEngine.getCurrentItems().size() > 0) {
-                    final Intent intent = new Intent(getActivity(), SentenceActivity.class);
-                    getActivity().startActivity(intent);
-                } else {
-                    NavigationEngine.goBack();
-
-                    Intent wearP2PIntent = new Intent(getActivity(), WearP2PService.class);
-                    wearP2PIntent.setAction(Constants.ACTION_CLICK);
-                    wearP2PIntent.putExtra(PART, part);
-
-                    final Intent intent = new Intent(getActivity(), ActionActivity.class);
-                    intent.putExtra(ActionActivity.INTENT, wearP2PIntent);
-                    getActivity().startActivity(intent);
-
-
-                }
+                PartFragment.this.onClick(getActivity(), part, getArguments().getInt(ROW));
             }
         });
 
         return v;
     }
 
+    public static void onClick(Context context, final Part part, int row) {
+        NavigationEngine.navigateTo(row);
+
+        if (NavigationEngine.getCurrentItems().size() > 0) {
+            final Intent intent = new Intent(context, SentenceActivity.class);
+            context.startActivity(intent);
+        } else {
+            NavigationEngine.goBack();
+
+            Intent wearP2PIntent = new Intent(context, WearP2PService.class);
+            wearP2PIntent.setAction(Constants.ACTION_CLICK);
+            wearP2PIntent.putExtra(PART, part);
+
+            final Intent intent = new Intent(context, ActionActivity.class);
+            intent.putExtra(ActionActivity.INTENT, wearP2PIntent);
+            intent.putExtra(ActionActivity.ICON, R.drawable.ic_action_phone);
+            context.startActivity(intent);
+        }
+    }
+
+    @Override
+    public Drawable getBackground() {
+        return null;
+    }
+
+    @Override
+    public void setBackgroundListener(final BackgroundListener backgroundListener) {
+
+    }
 }

@@ -6,7 +6,9 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
+import android.util.Log;
 import android.view.GestureDetector;
+import android.view.View;
 
 import org.gufroan.wearwolf.data.Part;
 
@@ -29,7 +31,15 @@ public class SentenceActivity extends Activity {
 
         NavigationEngine.populateList(this);
         parts = NavigationEngine.getCurrentItems();
-        partsPager.setAdapter(new PartsPagerAdapter(getFragmentManager()));
+        final PartsPagerAdapter adapter = new PartsPagerAdapter(getFragmentManager());
+        partsPager.setAdapter(adapter);
+        partsPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Log.d("CLICK", "here"  + v);
+
+            }
+        });
     }
 
     @Override

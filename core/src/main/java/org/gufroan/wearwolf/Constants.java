@@ -17,6 +17,7 @@ public final class Constants {
     public static final String DATA_CLICK_TIMESTAMP = "data_click_timestamp";
 
     public static final String MESSAGE_KEY = "key_msg";
+    public static final String PATH_NODE = "/node";
 
 
     private Constants() {}

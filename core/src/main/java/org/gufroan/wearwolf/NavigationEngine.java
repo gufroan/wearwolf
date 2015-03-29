@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 
 import org.gufroan.core.R;
+import org.gufroan.p2p.UpdateCommand;
 import org.gufroan.wearwolf.data.Node;
 import org.gufroan.wearwolf.data.Part;
 
@@ -40,8 +41,10 @@ public class NavigationEngine {
         }
     }
 
-    public static void addToCurrentNode(final String value) {
-        sNavigationCursor.addChild(new Node<>(new Part(value), sNavigationCursor));
+    public static void addToCurrentNode(Context context, final String value) {
+        Node<Part> newNode = new Node<>(new Part(value), sNavigationCursor);
+        sNavigationCursor.addChild(newNode);
+        new UpdateCommand(context, newNode.getPathForData(), newNode.getData()).execute();
     }
 
     public static void populateList(final Context ctx) {
@@ -172,5 +175,22 @@ public class NavigationEngine {
         list.add(current.getData().getStringData());
 
         return list;
+    }
+
+    public static void addTo(final String path, final Part part) {
+        final String[] pathParts = path.split("/");
+        Node<Part> currentNode = CONTENT_ROOT;
+        for (int i= 3; i< pathParts.length; i++) {
+            final Node<Part> newNode = currentNode.findByData(pathParts[i]);
+            if (newNode != null) {
+                currentNode = newNode;
+                break;
+            }  else {
+                // TODO
+                return;
+            }
+        }
+        Node<Part> newNode = new Node<>(part, currentNode);
+        currentNode.addChild(newNode);
     }
 }

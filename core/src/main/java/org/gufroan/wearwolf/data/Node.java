@@ -36,4 +36,26 @@ public class Node<T> {
     public T getData() {
         return data;
     }
+
+    public String getPathForData() {
+        if (parent == null) {
+            return getData().toString();
+        } else {
+            return getParent().getPathForData() + "/" + getData().toString();
+        }
+    }
+
+    public Node<T> findByData(final String data) {
+        for (Node<T> child : getChildren()) {
+            if (child.toString().equals(data)){
+                return child;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return getData().toString();
+    }
 }

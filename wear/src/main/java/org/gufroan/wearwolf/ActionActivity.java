@@ -6,11 +6,12 @@ import android.os.Bundle;
 
 public class ActionActivity extends Activity {
     public static final String INTENT = "intent";
+    public static final String ICON = "icon";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_action);
-        getFragmentManager().beginTransaction().add(R.id.container, ActionFragmentBuilder.newActionFragment((Intent) getIntent().getParcelableExtra(INTENT), "ok", R.drawable.action_button)).commit();
+        getFragmentManager().beginTransaction().add(R.id.container, ActionFragmentBuilder.newActionFragment((Intent) getIntent().getParcelableExtra(INTENT), "ok", android.R.drawable.ic_btn_speak_now)).commit();
     }
 }

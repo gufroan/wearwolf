@@ -60,4 +60,9 @@ public class Part implements Parcelable {
     private Part(Parcel in) {
         stringData = in.readString();
     }
+
+    @Override
+    public String toString() {
+        return getStringData();
+    }
 }
