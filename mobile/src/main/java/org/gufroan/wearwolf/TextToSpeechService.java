@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class TextToSpeechService extends IntentService implements TextToSpeech.OnInitListener {
 
 
-    private TextToSpeech mTTS;
+    private static TextToSpeech mTTS;
     private String message;
 
     public TextToSpeechService() {
@@ -34,28 +34,22 @@ public class TextToSpeechService extends IntentService implements TextToSpeech.O
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         onHandleIntent(intent);
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         message = intent.getStringExtra("message");
-        mTTS = new TextToSpeech(this, this);
+        if (mTTS == null) {
+            mTTS = new TextToSpeech(this, this);
+        } else
+            say(message);
+    }
 
-        mTTS.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-            @Override
-            public void onStart(String s) {
-            }
-
-            @Override
-            public void onDone(String s) {
-                mTTS.shutdown();
-                stopSelf();
-            }
-
-            @Override
-            public void onError(String s) {
-            }
-        });
+    @Override
+    public void onDestroy() {
+        mTTS.shutdown();
+        stopSelf();
+        super.onDestroy();
     }
 }

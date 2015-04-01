@@ -43,19 +43,17 @@ public class MobileP2PService extends WearableListenerService {
     }
 
     private void processMessage(String msg) {
-        Intent ttsIntent = new Intent(getApplicationContext(),TextToSpeechService.class);
+        Intent ttsIntent = new Intent(getApplicationContext(), TextToSpeechService.class);
         ttsIntent.putExtra("message", msg);
         startService(ttsIntent);
     }
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-
-        if(!googleApiClient.isConnected())
+        if (!googleApiClient.isConnected())
             googleApiClient.blockingConnect();
 
-        if(Constants.ERROR_PATH.equals(messageEvent.getPath())) {
-
+        if (Constants.ERROR_PATH.equals(messageEvent.getPath())) {
             DataMap map = DataMap.fromByteArray(messageEvent.getData());
 
             ByteArrayInputStream bis = new ByteArrayInputStream(map.getByteArray(Constants.DATA_EXCEPTION));
