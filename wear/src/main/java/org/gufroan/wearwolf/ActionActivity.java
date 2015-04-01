@@ -12,6 +12,6 @@ public class ActionActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_action);
-        getFragmentManager().beginTransaction().add(R.id.container, ActionFragmentBuilder.newActionFragment((Intent) getIntent().getParcelableExtra(INTENT), "ok", android.R.drawable.ic_btn_speak_now)).commit();
+        getFragmentManager().beginTransaction().add(R.id.container, ActionFragmentBuilder.newActionFragment((Intent) getIntent().getParcelableExtra(INTENT), "ok", R.drawable.ic_sound)).commit();
     }
 }
