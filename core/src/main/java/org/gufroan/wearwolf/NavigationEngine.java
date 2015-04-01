@@ -17,8 +17,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * Created by vitaliyistomov on 27/03/15.
@@ -30,6 +32,8 @@ public class NavigationEngine {
     private static final Node<Part> CONTENT_ROOT = new Node<>(new Part("root_element"), null);
 
     private static Node<Part> sNavigationCursor = CONTENT_ROOT;
+
+    private static Stack<Integer> breadCrumbs = new Stack<>();
 
     public static void writeCustomElementToFileStorage(final Context ctx, final String value) {
         try {
@@ -140,6 +144,7 @@ public class NavigationEngine {
 
     public static Part navigateTo(int position) {
         sNavigationCursor = sNavigationCursor.getChild(position);
+        breadCrumbs.add(position);
         return sNavigationCursor.getData();
     }
 
@@ -157,9 +162,18 @@ public class NavigationEngine {
         if (sNavigationCursor.getParent() != null) {
             sNavigationCursor = sNavigationCursor.getParent();
             result = sNavigationCursor.getData();
+            breadCrumbs.pop();
         }
 
         return result;
+    }
+
+    public static ArrayList<Integer> getBreadCrumbs() {
+        Integer[] array = new Integer[breadCrumbs.size()];
+        breadCrumbs.toArray(array);
+        List<Integer> result = Arrays.asList(array);
+        Collections.reverse(result);
+        return new ArrayList<>(result);
     }
 
     public static List<String> getValues() {
@@ -180,12 +194,12 @@ public class NavigationEngine {
     public static void addTo(final String path, final Part part) {
         final String[] pathParts = path.split("/");
         Node<Part> currentNode = CONTENT_ROOT;
-        for (int i= 3; i< pathParts.length; i++) {
+        for (int i = 3; i < pathParts.length; i++) {
             final Node<Part> newNode = currentNode.findByData(pathParts[i]);
             if (newNode != null) {
                 currentNode = newNode;
                 break;
-            }  else {
+            } else {
                 // TODO
                 return;
             }

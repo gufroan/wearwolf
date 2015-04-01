@@ -3,6 +3,7 @@ package org.gufroan.wearwolf;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 
 import org.gufroan.wearwolf.data.Part;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PartFragment extends CardFragment implements GridPageOptions {
@@ -48,14 +51,14 @@ public class PartFragment extends CardFragment implements GridPageOptions {
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                PartFragment.this.onClick(getActivity(), part, getArguments().getInt(ROW));
+                PartFragment.onClick(getActivity(), part, getArguments().getInt(ROW));
             }
         });
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                PartFragment.this.onClick(getActivity(), part, getArguments().getInt(ROW));
+                PartFragment.onClick(getActivity(), part, getArguments().getInt(ROW));
             }
         });
 
@@ -85,23 +88,41 @@ public class PartFragment extends CardFragment implements GridPageOptions {
 
     @Override
     public Drawable getBackground() {
-        String name = NavigationEngine.getCurrentItems().get(getArguments().getInt(ROW)).getStringData();
-        name = name.toLowerCase().replace(' ', '_').replaceAll("[^a-z]","");
-        int bgID = getResources().getIdentifier(name, "drawable", getActivity().getPackageName());
+        TypedArray resArray = getResources().obtainTypedArray(R.array.master_drawables);
+        String categoryName = "drawable_master";
+        int bgID = 0;
+
+        ArrayList<Integer> breadCrumbs = NavigationEngine.getBreadCrumbs();
+        breadCrumbs.add(getArguments().getInt("ROW"));
+
+        for (int breadCrumb : breadCrumbs) {
+            int val = resArray.getResourceId(breadCrumb, 0);
+            if (val != 0 && getResources().getResourceTypeName(val).contains("array")) {
+                resArray = getResources().obtainTypedArray(val);
+                categoryName = getResources().getResourceEntryName(val);
+            } else {
+                bgID = val;
+                break;
+            }
+        }
+        if (bgID == 0) {
+            String resName = categoryName.replaceAll("_drawables", "").toLowerCase().replace(' ', '_')
+                    .replaceAll("[^a-z]", "");
+            bgID = getResources().getIdentifier(resName, "drawable", getActivity().getPackageName());
+        }
+
+        resArray.recycle();
 
         Random rnd = new Random();
-        int color = Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        Drawable background;
+        // colors cannot be lower than 56
+        int color = Color.rgb(rnd.nextInt(200) + 56, rnd.nextInt(200) + 56, rnd.nextInt(200) + 56);
 
         if (bgID != 0) {
-            background = new LayerDrawable(new Drawable[]{
+            return new LayerDrawable(new Drawable[]{
                     new ColorDrawable(color),
                     getResources().getDrawable(bgID)});
-        }
-        else
-            background = new ColorDrawable(color);
-
-        return background;
+        } else
+            return new ColorDrawable(color);
     }
 
     @Override

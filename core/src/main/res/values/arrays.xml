@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="master_drawables">
+        <item>@array/Common_drawables</item>
+        <item>@array/Health_drawables</item>
+        <item>@array/Shop_drawables</item>
+        <item>@array/Restaurant_drawables</item>
+        <item>@array/Travel_drawables</item>
+    </array>
+
+    <array name="Common_drawables">
+        <item>@drawable/hello</item>
+        <item>@drawable/goodbye</item>
+        <item>@drawable/thank_you</item>
+        <item>@drawable/nice_to_see_you</item>
+        <item>@drawable/where_is_it</item>
+        <item>@drawable/when_is_this</item>
+        <item>@drawable/what_is_this</item>
+    </array>
+
+    <array name="Health_drawables">
+        <item>@drawable/i_have_a_headache</item>
+        <item>@drawable/i_dont_feel_good</item>
+        <item>@drawable/im_tired</item>
+        <item>@drawable/im_hungry</item>
+        <item>@drawable/i_need_medicine</item>
+    </array>
+
+    <array name="Shop_drawables">
+        <item>@drawable/how_much_is_this</item>
+        <item>@array/Where_is_the</item>
+        <item>@array/Do_you_sell</item>
+    </array>
+
+    <array name="Where_is_the_drawables">
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+    </array>
+
+    <array name="Do_you_sell_drawables">
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+    </array>
+
+    <array name="Restaurant_drawables">
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+    </array>
+
+    <array name="Travel_drawables">
+        <item>@drawable/how_much_is_this</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@drawable/when_is_this</item>
+        <item>@null</item>
+        <item>@null</item>
+        <item>@null</item>
+    </array>
+</resources>
